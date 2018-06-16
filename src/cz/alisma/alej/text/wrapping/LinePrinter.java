@@ -65,7 +65,7 @@ public class LinePrinter {
             if (lengthSoFar + 1 + word.length() > width) {
                 output.println(aligner.format(line));
                 line.clear();
-                lengthSoFar = -1;
+                lengthSoFar = 0;
             } else {
                 lengthSoFar++;
             }

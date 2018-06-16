@@ -27,16 +27,60 @@ package cz.alisma.alej.text.wrapping;
 import java.util.Scanner;
 
 public class WrapAndAlign {
-    private static final int MAX_WIDTH = 50;
+
+    public static String[] processArguements(String[] args) {
+        String[] processed = new String[] {"", ""};
+        for (int i = 0; i < args.length; i += 1) {
+            if (args[i].equals("--right")) {
+                processed[0] = "r";
+            } else if (args[i].equals("--left")) {
+                processed[0] = "l";
+            } else if (args[i].equals("--center") || args[i].equals("--centre")) {
+                processed[0] = "c";
+            } else if (args[i].equals("--justify")) {
+                processed[0] = "j";
+            } else if (args[i].equals("-w")) {
+                try {
+                    int w = Integer.parseInt(args[i + 1]);
+                    processed[1] = args[i + 1];
+                } catch (Exception e){}
+            } else {
+                try {
+                    String[] parts = args[i].split("=");
+                    if (parts[0].equals("--width")) {
+                        int w = Integer.parseInt(parts[1]);
+                        processed[1] = parts[1];
+                    }
+                } catch (Exception e){}
+            }
+        }
+        return processed;
+    }
 
     public static void main(String[] args) {
+        // default values in case when user does not specify any
+        int maxWidth = 50;
+        Aligner aligner = new LeftAligner();
+        // getting arguements from user
+        String[] processedArgs = processArguements(args);
+        if (!processedArgs[1].equals("")) {
+            maxWidth = Integer.parseInt(processedArgs[1]);
+        }
+        if (processedArgs[0].equals("r")) {
+            aligner = new RightAligner(maxWidth);
+        } else if (processedArgs[0].equals("c")) {
+            aligner = new CenterAligner(maxWidth);
+        } else if (processedArgs[0].equals("j")) {
+            aligner = new BlockAligner(maxWidth);
+        } else if (processedArgs[0].equals("l")) {
+            aligner = new LeftAligner();
+        }
         Scanner input = new Scanner(System.in);
         ParagraphDetector pd = new ParagraphDetector(input);
-        Aligner aligner = new LeftAligner();
 
         while (pd.hasNextParagraph()) {
             Paragraph para = pd.nextParagraph();
-            LinePrinter line = new LinePrinter(System.out, MAX_WIDTH, aligner);
+            LinePrinter line = new LinePrinter(System.out, maxWidth, aligner);
             while (para.hasNextWord()) {
                 String word = para.nextWord();
                 line.addWord(word);
