@@ -7,7 +7,7 @@ public class RightAligner implements Aligner {
     private final int TOTAL_WIDTH;
 
     public RightAligner(int w) {
-        TOTAL_WIDTH = 50;
+        TOTAL_WIDTH = w;
     }
 
     @Override

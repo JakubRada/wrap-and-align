@@ -58,7 +58,7 @@ public class WrapAndAlign {
     }
 
     public static void main(String[] args) {
-        // default values in case when user does not specify any
+        // default values in case when user does not specify them or does not specify them correctly
         int maxWidth = 50;
         Aligner aligner = new LeftAligner();
         // getting arguements from user
